@@ -1,0 +1,23 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+stages:
+  - generate
+  - build
+
+generate_classes:
+  image: your/docker:image
+  stage: generate
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker pull your/docker:image
+    - docker run -v $(pwd)/iconlib:/app/iconlib -v $(pwd)/output:/app/output your/docker:image $ARGUMENTS_FOR_SCRIPT_GENERATE_ICONS
+  only:
+    changes:
+      - icons/**/*
+
+build:
+  stage: build
+  script: echo "Building the project..."

@@ -1,0 +1,9 @@
+stages:
+  - build
+
+generate:
+  script:
+    - python my_generate.py $ARGUMENTS_FOR_SCRIPT_GENERATE_ICONS
+  only:
+    changes:
+      - path/to/icons/*
