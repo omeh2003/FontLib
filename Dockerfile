@@ -1,31 +1,33 @@
-# Using multi-stage builds
-# Stage 1: build
-FROM python:3.10-slim-buster as build
+#  образ на основе Ubuntu.
+FROM ubuntu:latest
 
-# Update system packages and install dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends fontforge fontforge-extras && \
-    pip install -U pip wheel setuptools
+#  переменные окружения, чтобы предотвратить взаимодействие с пользователем.
+ENV DEBIAN_FRONTEND=noninteractive TZ=Europe/Moscow
 
-# Copy python requirements file
-COPY requirements.txt /tmp/
+# нужные пакеты.
+RUN apt-get update && apt-get install -y \
+    fontforge \
+    python3-full \
+    python3-pip \
+    python3-fontforge \
+    fontforge-extras && \
+    rm -rf /var/lib/apt/lists/* &&\
+    rm -rf /var/cache/apt/archives/* &&\
+    rm -rf /usr/share/doc/* &&\
+    apt-get clean
 
-# Install python dependencies
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /tmp -r /tmp/requirements.txt
+# файл requirements.txt в контейнер.
+COPY requirements.txt ./
 
-# Install other python libraries
 
-# Stage 2: runtime
-FROM python:3.10-slim-buster
 
-COPY --from=build /usr/local /usr/local
-COPY --from=build /tmp/*.whl /tmp/
+#  зависимости из requirements.txt.
+RUN pip3 install -r requirements.txt
 
-RUN pip install --no-cache /tmp/*.whl && \
-    rm -rf /tmp/*.whl
+# запуск Python3 по умолчанию.
+RUN ln -s $(which python3) /usr/local/bin/python
 
-# Clean up
-RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+#  рабочая директория
 
 COPY ./my_generate.py /app/
 WORKDIR /app/

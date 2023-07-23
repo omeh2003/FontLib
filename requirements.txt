@@ -8,3 +8,4 @@ lxml~=4.9.3
 pyparsing~=2.4.7
 svgutils~=0.3.4
 zipp~=1.0.0
+fonttools~=4.41.1

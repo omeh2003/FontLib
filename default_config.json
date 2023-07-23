@@ -1,0 +1,19 @@
+{
+    "svg_dir": "./iconlib/",
+    "ttf_file": "CustomFont.ttf",
+    "fontname": "CustomFont",
+    "familyname": "customfont",
+    "fullname": "Regular",
+    "version": "001.000",
+    "design_size": 16,
+    "em": 512,
+    "ascent": 448,
+    "descent": 64,
+    "start_unicode_value": 57344,
+    "glyph_width": 500,
+    "dart_file": "customfont_icons.dart",
+    "class_name": "CustomFontIcons",
+    "one_svg_file": "customfont_one.svg",
+    "debug": false,
+    "output_dir": "./output"
+}
